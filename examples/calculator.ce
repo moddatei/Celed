@@ -1,0 +1,17 @@
+greeting := "Welcome to the Celed Calculator!"
+print(greeting)
+
+multiplier := 5
+
+calculate := (op, x, y) => {
+    if op == "+" {
+        x + y
+    } else if op == "*" {
+        x * y
+    } else {
+        0
+    }
+}
+
+result := calculate("*", 10, multiplier)
+result |> print

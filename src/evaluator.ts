@@ -1,4 +1,4 @@
-import { Node, Program, ExpressionStatement, IntegerLiteral, InfixExpression, IfExpression, BlockStatement, AssignStatement, Identifier, FunctionLiteral, CallExpression, PipelineExpression, StringLiteral } from "./ast";
+import { Node, Program, ExpressionStatement, IntegerLiteral, InfixExpression, IfExpression, BlockStatement, AssignStatement, Identifier, FunctionLiteral, CallExpression, PipelineExpression, StringLiteral, Expression } from "./ast";
 import { Obj, Integer, BooleanObj, Null, ReturnValue, ErrorObj, FunctionObj, Builtin, StringObj } from "./object";
 import { Environment } from "./environment";
 
@@ -124,8 +124,13 @@ function evalInfixExpression(operator: string, left: Obj, right: Obj): Obj {
     if (left instanceof Integer && right instanceof Integer) {
         return evalIntegerInfixExpression(operator, left, right);
     }
-    if (left instanceof StringObj && right instanceof StringObj && operator === "+") {
-        return new StringObj(left.value + right.value);
+    if (left instanceof StringObj && right instanceof StringObj) {
+        if (operator === "+") {
+            return new StringObj(left.value + right.value);
+        }
+        if (operator === "==") {
+            return nativeBoolToBooleanObject(left.value === right.value);
+        }
     }
     if (left.type() !== right.type()) {
         return new ErrorObj(`type mismatch: ${left.type()} ${operator} ${right.type()}`);

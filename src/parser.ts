@@ -4,11 +4,12 @@ import {
     Program, Statement, ExpressionStatement, AssignStatement,
     Expression, Identifier, IntegerLiteral, StringLiteral,
     InfixExpression, BlockStatement, IfExpression, FunctionLiteral,
-    CallExpression, PipelineExpression
+    CallExpression, PipelineExpression, TupleExpression
 } from "./ast";
 
 enum Precedence {
     LOWEST = 1,
+    ARROW,
     PIPE,
     EQUALS,
     SUM,
@@ -17,6 +18,7 @@ enum Precedence {
 }
 
 const precedences: Record<TokenType, Precedence> = {
+    [TokenType.ARROW]: Precedence.ARROW,
     [TokenType.PIPE]: Precedence.PIPE,
     [TokenType.EQUALS]: Precedence.EQUALS,
     [TokenType.PLUS]: Precedence.SUM,
@@ -137,12 +139,12 @@ export class Parser {
     }
 
     private parseGroupedExpression(): Expression | null {
-        this.nextToken();
-        const exp = this.parseExpression(Precedence.LOWEST);
-        if (!this.expectPeek(TokenType.RPAREN)) {
-            return null;
+        const token = this.curToken;
+        const list = this.parseExpressionList(TokenType.RPAREN);
+        if (list.length === 1) {
+            return list[0];
         }
-        return exp;
+        return new TupleExpression(token, list);
     }
 
     private parseIfExpression(): Expression | null {
@@ -156,9 +158,9 @@ export class Parser {
 
         if (this.peekToken.type === TokenType.ELSE) {
             this.nextToken();
-            if (this.peekToken.type === TokenType.IF) {
+            if ((this.peekToken.type as TokenType) === TokenType.IF) {
                 this.nextToken();
-                expression.alternative = this.parseIfExpression();
+                expression.alternative = this.parseIfExpression() as IfExpression | null;
             } else {
                 if (!this.expectPeek(TokenType.LBRACE)) {
                     return null;
@@ -196,6 +198,8 @@ export class Parser {
             fn.parameters.push(left);
         } else if (left instanceof CallExpression && left.function instanceof Identifier) {
             fn.parameters = [left.function as Identifier, ...(left.args as Identifier[])];
+        } else if (left instanceof TupleExpression) {
+            fn.parameters = left.elements as Identifier[];
         }
         this.nextToken();
         fn.body = this.parseBlockStatement();

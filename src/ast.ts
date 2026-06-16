@@ -179,3 +179,14 @@ export class PipelineExpression implements Expression {
     expressionNode(): void {}
     tokenLiteral(): string { return this.token.literal; }
 }
+
+export class TupleExpression implements Expression {
+    token: Token;
+    elements: Expression[] = [];
+    constructor(token: Token, elements: Expression[] = []) {
+        this.token = token;
+        this.elements = elements;
+    }
+    expressionNode(): void {}
+    tokenLiteral(): string { return this.token.literal; }
+}
