@@ -1,0 +1,14 @@
+numbers := [1, 2, 3, 4, 5]
+
+print("Original numbers:")
+print(numbers)
+
+print("---")
+print("We can easily modify this list using Celed's pipeline operator |>")
+print("Multiplying each number by 10...")
+
+result := numbers |> map(x => { 
+    x * 10 
+})
+
+result |> print

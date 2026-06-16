@@ -1,0 +1,11 @@
+counter := 0
+limit := 5
+
+print("Counting to", limit, "using a while loop:")
+
+while counter < limit {
+    print("Counter is at:", counter)
+    counter := counter + 1
+}
+
+print("Loop finished!")

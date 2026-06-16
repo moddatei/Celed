@@ -1,0 +1,15 @@
+fibonacci := n => {
+    if n == 0 {
+        0
+    } else if n == 1 {
+        1
+    } else {
+        fibonacci(n - 1) + fibonacci(n - 2)
+    }
+}
+
+print("Calculating the 10th Fibonacci number using recursion...")
+
+result := fibonacci(10)
+
+print("Result:", result)

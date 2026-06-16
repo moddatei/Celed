@@ -2,8 +2,12 @@
   "name": "celed",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/cli/index.js",
+  "bin": {
+    "celed": "./dist/cli/index.js"
+  },
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,5 +18,8 @@
     "@types/node": "^25.9.3",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "discord.js": "^14.26.4"
   }
 }

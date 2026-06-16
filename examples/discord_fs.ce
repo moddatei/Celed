@@ -1,0 +1,8 @@
+print("Testing File System...")
+file_write("test_output.txt", "Hello from Celed v3.5!")
+content := file_read("test_output.txt")
+print("File content:", content)
+
+print("Testing Discord built-in...")
+bot := discord("FAKE_TOKEN")
+print("Discord Bot object:", bot)
