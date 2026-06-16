@@ -39,7 +39,7 @@ export class Lexer {
                     this.readChar();
                     tok = { type: TokenType.ASSIGN, literal: char + this.ch };
                 } else {
-                    tok = { type: TokenType.ILLEGAL, literal: this.ch };
+                    tok = { type: TokenType.COLON, literal: this.ch };
                 }
                 break;
             case "=":
@@ -64,6 +64,8 @@ export class Lexer {
                     tok = { type: TokenType.ILLEGAL, literal: this.ch };
                 }
                 break;
+            case "[": tok = { type: TokenType.LBRACKET, literal: this.ch }; break;
+            case "]": tok = { type: TokenType.RBRACKET, literal: this.ch }; break;
             case "+": tok = { type: TokenType.PLUS, literal: this.ch }; break;
             case "-": tok = { type: TokenType.MINUS, literal: this.ch }; break;
             case "*": tok = { type: TokenType.STAR, literal: this.ch }; break;

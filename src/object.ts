@@ -9,7 +9,9 @@ export enum ObjectType {
     RETURN_VALUE_OBJ = "RETURN_VALUE",
     ERROR_OBJ = "ERROR",
     FUNCTION_OBJ = "FUNCTION",
-    BUILTIN_OBJ = "BUILTIN"
+    BUILTIN_OBJ = "BUILTIN",
+    ARRAY_OBJ = "ARRAY",
+    HASH_OBJ = "HASH"
 }
 
 export interface Obj {
@@ -75,11 +77,35 @@ export class FunctionObj implements Obj {
     }
 }
 
-export type BuiltinFunction = (...args: Obj[]) => Obj;
+export type BuiltinFunction = (...args: Obj[]) => Promise<Obj>;
 
 export class Builtin implements Obj {
     fn: BuiltinFunction;
     constructor(fn: BuiltinFunction) { this.fn = fn; }
     type(): ObjectType { return ObjectType.BUILTIN_OBJ; }
     inspect(): string { return "builtin function"; }
+}
+
+export class ArrayObj implements Obj {
+    elements: Obj[];
+    constructor(elements: Obj[]) { this.elements = elements; }
+    type(): ObjectType { return ObjectType.ARRAY_OBJ; }
+    inspect(): string { return `[${this.elements.map(e => e.inspect()).join(", ")}]`; }
+}
+
+export class HashPair {
+    key: Obj;
+    value: Obj;
+    constructor(key: Obj, value: Obj) { this.key = key; this.value = value; }
+}
+
+export class HashObj implements Obj {
+    pairs: Map<string, HashPair>;
+    constructor(pairs: Map<string, HashPair>) { this.pairs = pairs; }
+    type(): ObjectType { return ObjectType.HASH_OBJ; }
+    inspect(): string {
+        const out: string[] = [];
+        this.pairs.forEach(p => out.push(`${p.key.inspect()}: ${p.value.inspect()}`));
+        return `{${out.join(", ")}}`;
+    }
 }

@@ -1,0 +1,11 @@
+print("Fetching user data...")
+
+raw_data := fetch("https://jsonplaceholder.typicode.com/users/1")
+user := json_parse(raw_data)
+
+print("Name:", user["name"])
+print("City:", user["address"]["city"])
+
+print("---")
+print("Company Info:")
+print(user["company"]["name"], "-", user["company"]["catchPhrase"])

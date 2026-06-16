@@ -190,3 +190,38 @@ export class TupleExpression implements Expression {
     expressionNode(): void {}
     tokenLiteral(): string { return this.token.literal; }
 }
+
+export class ArrayLiteral implements Expression {
+    token: Token;
+    elements: Expression[] = [];
+    constructor(token: Token, elements: Expression[] = []) {
+        this.token = token;
+        this.elements = elements;
+    }
+    expressionNode(): void {}
+    tokenLiteral(): string { return this.token.literal; }
+}
+
+export class IndexExpression implements Expression {
+    token: Token;
+    left: Expression;
+    index: Expression | null;
+    constructor(token: Token, left: Expression, index: Expression | null = null) {
+        this.token = token;
+        this.left = left;
+        this.index = index;
+    }
+    expressionNode(): void {}
+    tokenLiteral(): string { return this.token.literal; }
+}
+
+export class HashLiteral implements Expression {
+    token: Token;
+    pairs: Map<Expression, Expression>;
+    constructor(token: Token) {
+        this.token = token;
+        this.pairs = new Map();
+    }
+    expressionNode(): void {}
+    tokenLiteral(): string { return this.token.literal; }
+}

@@ -5,7 +5,7 @@ import { evaluate } from './evaluator';
 import { Environment } from './environment';
 import { ErrorObj } from './object';
 
-function runFile(filename: string): void {
+async function runFile(filename: string): Promise<void> {
     const code = fs.readFileSync(filename, 'utf-8');
     const lexer = new Lexer(code);
     const parser = new Parser(lexer);
@@ -21,7 +21,7 @@ function runFile(filename: string): void {
     }
 
     const env = new Environment();
-    const result = evaluate(program, env);
+    const result = await evaluate(program, env);
 
     if (result instanceof ErrorObj) {
         console.error(result.inspect());
@@ -36,7 +36,10 @@ if (args.length === 0) {
 }
 
 if (args[0] === "run" && args[1]) {
-    runFile(args[1]);
+    runFile(args[1]).catch(e => {
+        console.error(e);
+        process.exit(1);
+    });
 } else {
     console.log("Usage: celed run <filename.ce>");
     process.exit(1);
