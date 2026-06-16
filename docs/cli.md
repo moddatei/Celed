@@ -1,18 +1,23 @@
-# Celed CLI Documentation
+# Celed Command Line Interface (CLI)
 
-The CLI (Command Line Interface) is the entry point for the Celed programming language.
+The Celed CLI is a modular router located in `src/cli/index.ts` and routes traffic to isolated command handlers in the `src/cli/commands/` directory.
 
-## Purpose
-It connects the Lexer, Parser, and Interpreter together. When a user runs `celed run file.ce`, the CLI:
-1. Reads the file from the disk.
-2. Passes the raw text to the Lexer to get Tokens.
-3. Passes the Tokens to the Parser to build the AST.
-4. Passes the AST to the Interpreter to execute the code.
+## Commands
 
-## Usage
-The primary command is:
-`celed run <filename.ce>`
+### `celed run <file>`
+Interprets a Celed script live using the AST evaluator.
+- Handler: `commands/run.ts`
+- Usage: `celed run script.ce`
 
-If there are any syntax errors (e.g., forgetting a curly brace), the CLI stops execution and prints the errors cleanly. If execution succeeds, it silently finishes (unless the script uses `print`).
+### `celed build <file>`
+Compiles a Celed script to a high-performance native JavaScript binary executable using the Celed Compiler.
+- Handler: `commands/build.ts`
+- Usage: `celed build script.ce`
 
-As per the strict design rules, `src/index.ts` contains zero comments.
+### `celed install <pkg>`
+Interfaces with the Package Manager to download community packages into your `.celed` library.
+- Handler: `commands/install.ts`
+
+### `celed update`
+Automatically connects to GitHub, pulls the latest commits on the `main` branch, recompiles the engine using `tsc`, and natively links the binaries to your operating system via `npm link`.
+- Handler: `commands/update.ts`
